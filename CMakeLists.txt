@@ -10,7 +10,7 @@ add_library(${PROJECT_NAME} STATIC UserManager.cpp)
 install(FILES UserManager.h DESTINATION include)
 
 find_package(OpenSSL REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto)
+target_link_libraries(${PROJECT_NAME} PRIVATE OpenSSL::SSL OpenSSL::Crypto pqxx)
 
 
 # 设置库文件安装路径
