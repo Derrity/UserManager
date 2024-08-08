@@ -127,7 +127,7 @@ userInfo UserManager::GetUserInfo(const std::string &username) {
 }
 
 void UserManager::ChangeUserInfo(const std::string &username, const std::string &type, const std::string &value) {
-    try{
+    try {
         this->username = username;
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
@@ -141,22 +141,23 @@ void UserManager::ChangeUserInfo(const std::string &username, const std::string 
             return;
         }
 
-        if (type != "email"|type != "password"|type != "permission"|type != "token"|type != "balance"){
+        if (type != "email" && type != "password" && type != "permission" && type != "token" && type != "balance") {
             std::cerr << "Invalid Type: " << type << std::endl;
             return;
         }
 
         std::string _value;
-        if (type == "password")
-            _value = UserManager::GenerateSaltedSha256(value);
-        else
+        if (type == "password") {
+            _value = GenerateSaltedSha256(value);
+        } else {
             _value = value;
+        }
 
         pqxx::work U(_connect);
         U.exec_params(
                 "UPDATE user_info SET " + type + " = $1 WHERE username = $2",
                 _value, this->username
-                );
+        );
         U.commit();
 
     } catch (const std::exception &e) {
