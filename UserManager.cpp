@@ -115,7 +115,7 @@ userInfo UserManager::GetUserInfo(const std::string &username) {
         user_info.email = row["email"].as<std::string>();
         user_info.username = row["username"].as<std::string>();
         user_info.token = row["token"].as<std::string>();
-        user_info.created_date = row["created"].as<std::string>();
+        user_info.created_date = row["created_date"].as<std::string>();
         user_info.permission = row["permission"].as<int>();
         user_info.balance = row["balance"].as<double>();
 
