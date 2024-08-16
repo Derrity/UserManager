@@ -41,6 +41,7 @@ public:
     void DeleteUser(const std::string &username);
     void ChangeUserInfo(const std::string &username, const std::string &type, const std::string &value);
     userInfo GetUserInfo(const std::string &username);
+    bool CheckPassword(const std::string &username, const std::string &password);
 };
 
 #endif // USERMANAGER_H

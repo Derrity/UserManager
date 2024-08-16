@@ -164,3 +164,32 @@ void UserManager::ChangeUserInfo(const std::string &username, const std::string 
         std::cerr << "Change User " << username << "'s Info Error: " << e.what() << std::endl;
     }
 }
+
+bool UserManager::CheckPassword(const std::string &username, const std::string &password) {
+    try {
+        this->username = username;
+        if (!_connect.is_open()) {
+            std::cerr << "Can't open database" << std::endl;
+            return false;
+        }
+
+        CheckUser();
+
+        if (!if_exist) {
+            std::cerr << "User " << this->username << " does not exist" << std::endl;
+            return false;
+        }
+
+        pqxx::work W(_connect);
+        pqxx::result R = W.exec_params("SELECT password FROM user_info WHERE username = $1", username);
+
+        const pqxx::row &row = R[0];
+        std::string _password = row["password"].as<std::string>();
+
+        return _password == GenerateSaltedSha256(password);
+
+    } catch (const std::exception &e) {
+        std::cerr << "Check User " << username << "'s Password Error: " << e.what() << std::endl;
+        return false;
+    }
+}
