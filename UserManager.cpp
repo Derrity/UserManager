@@ -22,9 +22,10 @@ std::string UserManager::GenerateSaltedSha256(const std::string &password) {
     return ss.str();
 }
 
-UserManager::UserManager(const std::string &connection_) : _connect(connection_) {}
+UserManager::UserManager(const std::string &_username) : username(_username){}
 
 void UserManager::CheckUser() {
+    pqxx::connection _connect("");
     try {
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
@@ -42,9 +43,9 @@ void UserManager::CheckUser() {
     }
 }
 
-void UserManager::CreateUser(const std::string &username, const std::string &email, const std::string &password) {
+void UserManager::CreateUser(const std::string &email, const std::string &password) {
+    pqxx::connection _connect("");
     try {
-        this->username = username;
         this->email = email;
         this->password = GenerateSaltedSha256(password);
         this->token = boost::uuids::to_string(boost::uuids::random_generator()());
@@ -67,9 +68,9 @@ void UserManager::CreateUser(const std::string &username, const std::string &ema
     }
 }
 
-void UserManager::DeleteUser(const std::string &username) {
+void UserManager::DeleteUser() {
+    pqxx::connection _connect("");
     try {
-        this->username = username;
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
             return;
@@ -92,10 +93,10 @@ void UserManager::DeleteUser(const std::string &username) {
     }
 }
 
-userInfo UserManager::GetUserInfo(const std::string &username) {
+userInfo UserManager::GetUserInfo() {
+    pqxx::connection _connect("");
     userInfo user_info;
     try {
-        this->username = username;
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
             return user_info;
@@ -126,9 +127,9 @@ userInfo UserManager::GetUserInfo(const std::string &username) {
     return user_info;
 }
 
-void UserManager::ChangeUserInfo(const std::string &username, const std::string &type, const std::string &value) {
+void UserManager::ChangeUserInfo(const std::string &type, const std::string &value) {
+    pqxx::connection _connect("");
     try {
-        this->username = username;
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
             return;
@@ -165,9 +166,9 @@ void UserManager::ChangeUserInfo(const std::string &username, const std::string 
     }
 }
 
-bool UserManager::CheckPassword(const std::string &username, const std::string &password) {
+bool UserManager::CheckPassword(const std::string &password) {
+    pqxx::connection _connect("");
     try {
-        this->username = username;
         if (!_connect.is_open()) {
             std::cerr << "Can't open database" << std::endl;
             return false;

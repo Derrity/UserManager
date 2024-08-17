@@ -21,7 +21,6 @@ struct userInfo {
 
 class UserManager {
 private:
-    pqxx::connection _connect;
     std::string email;
     std::string username;
     std::string password;
@@ -35,13 +34,13 @@ private:
     void CheckUser();
 
 public:
-    UserManager(const std::string &connection_);
+    UserManager(const std::string &username);
 
-    void CreateUser(const std::string &username, const std::string &email, const std::string &password);
-    void DeleteUser(const std::string &username);
-    void ChangeUserInfo(const std::string &username, const std::string &type, const std::string &value);
-    userInfo GetUserInfo(const std::string &username);
-    bool CheckPassword(const std::string &username, const std::string &password);
+    void CreateUser(const std::string &email, const std::string &password);
+    void DeleteUser();
+    void ChangeUserInfo(const std::string &type, const std::string &value);
+    userInfo GetUserInfo();
+    bool CheckPassword(const std::string &password);
 };
 
 #endif // USERMANAGER_H
